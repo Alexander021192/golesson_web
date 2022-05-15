@@ -15,6 +15,8 @@ func SaveArt(w http.ResponseWriter, r *http.Request) {
 	anons := r.FormValue("anons")
 	full_text := r.FormValue("full_text")
 
+	fmt.Println(title, anons, full_text)
+
 	if title == "" || anons == "" || full_text == "" {
 		fmt.Fprint(w, "не все данные ")
 	} else {

@@ -22,7 +22,7 @@ func ReadCsv(filename string) ([][]string, error) {
 	defer file.Close()
 
 	csvReader := csv.NewReader(file)
-	// csvReader.Comma = ';'
+	csvReader.Comma = ';'
 
 	data, err := csvReader.ReadAll()
 	if err != nil {
@@ -75,4 +75,21 @@ func CreateArtList(data [][]string) []Art {
 		}
 	}
 	return ArtList
+}
+
+func GetArt(data [][]string, id int) Art {
+	var row Art
+	for j, field := range data[id] {
+		switch j {
+		case 0:
+			row.Id = field
+		case 1:
+			row.Title = field
+		case 2:
+			row.Anons = field
+		case 3:
+			row.FullText = field
+		}
+	}
+	return row
 }
