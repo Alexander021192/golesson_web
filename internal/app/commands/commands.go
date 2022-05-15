@@ -7,7 +7,14 @@ import (
 	"os"
 )
 
-func readCsv(filename string) ([][]string, error) {
+type Art struct {
+	Id       string
+	Title    string
+	Anons    string
+	FullText string
+}
+
+func ReadCsv(filename string) ([][]string, error) {
 	file, err := os.Open(filename)
 	if err != nil {
 		panic(err)
@@ -27,7 +34,7 @@ func readCsv(filename string) ([][]string, error) {
 	return data, err
 }
 
-func addRow(data [][]string, row []string) ([][]string, error) {
+func AddRow(data [][]string, row []string) ([][]string, error) {
 	fmt.Println(row)
 	data = append(data, row)
 	fmt.Println(data)
@@ -45,4 +52,27 @@ func addRow(data [][]string, row []string) ([][]string, error) {
 		log.Fatal(err)
 	}
 	return data, err
+}
+
+func CreateArtList(data [][]string) []Art {
+	var ArtList []Art
+	for i, line := range data {
+		if i > 0 { // omit header line
+			var row Art
+			for j, field := range line {
+				switch j {
+				case 0:
+					row.Id = field
+				case 1:
+					row.Title = field
+				case 2:
+					row.Anons = field
+				case 3:
+					row.FullText = field
+				}
+			}
+			ArtList = append(ArtList, row)
+		}
+	}
+	return ArtList
 }
