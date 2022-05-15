@@ -75,7 +75,7 @@ func create(w http.ResponseWriter, r *http.Request) {
 
 func save_art(w http.ResponseWriter, r *http.Request) {
 
-	data, _ := comands.readCsv("test.csv")
+	data, _ := commands.readCsv("test.csv")
 
 	title := r.FormValue("title")
 	anons := r.FormValue("anons")
@@ -84,7 +84,7 @@ func save_art(w http.ResponseWriter, r *http.Request) {
 	if title == "" || anons == "" || full_text == "" {
 		fmt.Fprint(w, "не все данные ")
 	} else {
-		data, _ = comands.addRow(data, []string{strconv.Itoa(len(data)), title, anons, full_text})
+		data, _ = commands.addRow(data, []string{strconv.Itoa(len(data)), title, anons, full_text})
 
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 	}
