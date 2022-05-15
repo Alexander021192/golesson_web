@@ -1,13 +1,11 @@
 package main
 
 import (
-	"encoding/csv"
 	"fmt"
 	"html/template"
-	"log"
 	"net/http"
-	"os"
 	"strconv"
+	"github.com/Alexander021192/web/internal/app/commands"
 )
 
 type art struct {
@@ -35,49 +33,49 @@ func create(w http.ResponseWriter, r *http.Request) {
 	t.ExecuteTemplate(w, "create", nil)
 }
 
-func readCsv(filename string) ([][]string, error) {
-	file, err := os.Open(filename)
-	if err != nil {
-		panic(err)
-	}
-	defer file.Close()
+// func readCsv(filename string) ([][]string, error) {
+// 	file, err := os.Open(filename)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	defer file.Close()
 
-	csvReader := csv.NewReader(file)
-	// csvReader.Comma = ';'
+// 	csvReader := csv.NewReader(file)
+// 	// csvReader.Comma = ';'
 
-	data, err := csvReader.ReadAll()
-	if err != nil {
-		log.Fatal(err)
-	}
-	// convert records to array of structs
-	// ffList := createFfList(data)
-	// return ffList, err
-	return data, err
-}
+// 	data, err := csvReader.ReadAll()
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	// convert records to array of structs
+// 	// ffList := createFfList(data)
+// 	// return ffList, err
+// 	return data, err
+// }
 
-func addRow(data [][]string, row []string) ([][]string, error) {
-	fmt.Println(row)
-	data = append(data, row)
-	fmt.Println(data)
+// func addRow(data [][]string, row []string) ([][]string, error) {
+// 	fmt.Println(row)
+// 	data = append(data, row)
+// 	fmt.Println(data)
 
-	f, err := os.Create("test.csv")
-	defer f.Close()
+// 	f, err := os.Create("test.csv")
+// 	defer f.Close()
 
-	if err != nil {
-		log.Fatalln("failed to open file", err)
-	}
-	w := csv.NewWriter(f)
-	err = w.WriteAll(data)
+// 	if err != nil {
+// 		log.Fatalln("failed to open file", err)
+// 	}
+// 	w := csv.NewWriter(f)
+// 	err = w.WriteAll(data)
 
-	if err != nil {
-		log.Fatal(err)
-	}
-	return data, err
-}
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	return data, err
+// }
 
 func save_art(w http.ResponseWriter, r *http.Request) {
 
-	data, _ := readCsv("test.csv")
+	data, _ := comands.readCsv("test.csv")
 
 	title := r.FormValue("title")
 	anons := r.FormValue("anons")
@@ -86,7 +84,7 @@ func save_art(w http.ResponseWriter, r *http.Request) {
 	if title == "" || anons == "" || full_text == "" {
 		fmt.Fprint(w, "не все данные ")
 	} else {
-		data, _ = addRow(data, []string{strconv.Itoa(len(data)), title, anons, full_text})
+		data, _ = comands.addRow(data, []string{strconv.Itoa(len(data)), title, anons, full_text})
 
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 	}

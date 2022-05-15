@@ -1,12 +1,10 @@
-package comands
+package commands
 
 import (
 	"encoding/csv"
 	"fmt"
 	"log"
-	"net/http"
 	"os"
-	"strconv"
 )
 
 func readCsv(filename string) ([][]string, error) {
@@ -47,21 +45,4 @@ func addRow(data [][]string, row []string) ([][]string, error) {
 		log.Fatal(err)
 	}
 	return data, err
-}
-
-func save_art(w http.ResponseWriter, r *http.Request) {
-
-	data, _ := readCsv("test.csv")
-
-	title := r.FormValue("title")
-	anons := r.FormValue("anons")
-	full_text := r.FormValue("full_text")
-
-	if title == "" || anons == "" || full_text == "" {
-		fmt.Fprint(w, "не все данные ")
-	} else {
-		data, _ = addRow(data, []string{strconv.Itoa(len(data)), title, anons, full_text})
-
-		http.Redirect(w, r, "/", http.StatusSeeOther)
-	}
 }
